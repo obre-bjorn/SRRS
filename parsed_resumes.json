@@ -1,0 +1,8 @@
+[
+  {
+    "error": "Invalid JSON response: Expecting ',' delimiter: line 18 column 10 (char 467)",
+    "raw_response": "<think>\nOkay, I need to extract specific fields from the given resume and return a JSON object with all the required information. Let me go through each section step by step.\n\nFirst, the name field. Looking at the resume text, the full name is BJORN OBARE. So that's straightforward.\n\nNext, email. The resume has an email address: obre.bjorn@gmail.com. I'll make sure to include that exactly as it appears.\n\nPhone number comes next. The resume lists the phone as +254 792093576. I should note that wi...",
+    "filename": "OB_CV.pdf",
+    "text_length": 3826
+  }
+]
