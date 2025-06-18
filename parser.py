@@ -6,13 +6,7 @@ import fitz  # PyMuPDF
 from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer, util
 
-# To limit to many requests errors
-import os
-import json
-import time
-import fitz  # PyMuPDF
-import requests
-from dotenv import load_dotenv
+
 
 def safe_post_request(endpoint, data, headers, retries=3):
     for i in range(retries):
@@ -42,20 +36,16 @@ class GroqResumeExtractor:
 
     def extract_info(self, resume_text):
         prompt = f"""
-        Extract key information from the following resume. Return this JSON format:
+Extract resume information as strict minified JSON (one line, no line breaks, no extra text).
 
-        {{
-        "name": "",
-        "email": "",
-        "skills": ["", "", ...],
-        "experience": ["", "", ...]
-        }}
+Expected structure:
+{{"name":"", "email":"", "phone":"", "skills":["", "", ""], "experience":["", "", ""]}}
 
-        RESUME:
-        {resume_text}
+Only return this JSON. No explanations. No markdown.
+Resume:
+{resume_text}
+"""
 
-        Respond only with valid JSON. No explanations.
-        """
 
         headers = {
             "Authorization": f"Bearer {self.api_key}",
@@ -89,13 +79,13 @@ class GroqResumeExtractor:
         return results
 
 # 🧪 Test
-if __name__ == "__main__":
-    folder = "./resumes"  # your folder of PDFs
-    extractor = GroqResumeExtractor()
-    extracted = extractor.process_resume_folder(folder)
+# if __name__ == "__main__":
+#     folder = "./resumes"  # your folder of PDFs
+#     extractor = GroqResumeExtractor()
+#     extracted = extractor.process_resume_folder(folder)
 
-    print("\n✅ Final Extracted Info:")
-    print(json.dumps(extracted, indent=2))
+#     print("\n✅ Final Extracted Info:")
+#     print(json.dumps(extracted, indent=2))
 
 
 class ResumeRanker:
@@ -132,6 +122,8 @@ def process_resumes(folder_path, job_description):
                 "info": info,
                 "text": text  # keep for ranking
             })
+            
+            print(info)
 
     scores = ranker.rank_resumes([res["text"] for res in detailed_results])
 
